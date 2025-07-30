@@ -1,8 +1,6 @@
-// File: backend/models/User.js
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    // Common fields
     name: { type: String, required: true },
     email: { type: String, unique: true, sparse: true },
     mobileNumber: { type: String, unique: true, sparse: true },
@@ -10,23 +8,20 @@ const userSchema = new mongoose.Schema({
     role: { type: String, enum: ['vendor', 'supplier', 'delivery_partner'], required: true },
     isActive: { type: Boolean, default: true },
     
-    // --- NEW: Area field for simple text-based location matching ---
-    area: { type: String, trim: true, index: true }, // e.g., "Kamla Nagar"
+    area: { type: String, trim: true, index: true },
 
-    // Vendor-specific
     businessType: { type: String },
     menu: [{
         dishName: String,
         price: Number,
         ingredients: [{
-            name: String,       // e.g., "Potato"
-            quantity: Number,   // e.g., 0.1
-            unit: String        // e.g., "kg"
+            name: String,
+            quantity: Number,
+            unit: String
         }]
-    }], // <-- ADD THIS
+    }],
 
     badges: { type: [String], default: ['Beginning of Journey'] },
-    // Supplier-specific fields
     businessName: { type: String },
     gstin: { type: String },
     fssaiLicense: { type: String },

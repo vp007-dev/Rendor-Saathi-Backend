@@ -1,5 +1,3 @@
-// File: backend/routes/auth.js
-
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -7,8 +5,6 @@ const User = require('../models/User');
 const Otp = require('../models/Otp');
 
 const router = express.Router();
-
-// --- VENDOR REGISTRATION & LOGIN ROUTES ---
 
 router.post('/vendor/register', async (req, res) => {
     try {
@@ -44,7 +40,6 @@ router.post('/vendor/verify', async (req, res) => {
         await newUser.save();
         const token = jwt.sign({ id: newUser._id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
         await Otp.deleteOne({ mobileNumber });
-        // --- FIXED: Send the full user object, including default badges ---
         res.status(201).json({ message: 'Vendor registered successfully!', token, vendor: newUser });
     } catch (error) {
         console.error("VENDOR VERIFY ERROR:", error);
@@ -88,7 +83,6 @@ router.post('/vendor/login/verify', async (req, res) => {
         }
         const token = jwt.sign({ id: vendor._id, role: vendor.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
         await Otp.deleteOne({ mobileNumber });
-        // --- FIXED: Send the full user object, including badges ---
         res.status(200).json({ message: `Welcome back, ${vendor.name}!`, token, vendor: vendor });
     } catch (error) {
         console.error("VENDOR LOGIN VERIFY ERROR:", error);
@@ -97,7 +91,7 @@ router.post('/vendor/login/verify', async (req, res) => {
 });
 
 
-// --- SUPPLIER REGISTRATION & LOGIN ROUTES ---
+
 router.post('/supplier/register', async (req, res) => {
     try {
         const {
@@ -144,7 +138,6 @@ router.post('/supplier/login', async (req, res) => {
             return res.status(403).json({ message: 'Your account has not been verified yet. Please wait for approval.' });
         }
         const token = jwt.sign({ id: supplier._id, role: supplier.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
-        // --- FIXED: Send the full user object ---
         res.status(200).json({ message: `Welcome back, ${supplier.name}!`, token, supplier: supplier });
     } catch (error) {
         console.error("SUPPLIER LOGIN ERROR:", error);

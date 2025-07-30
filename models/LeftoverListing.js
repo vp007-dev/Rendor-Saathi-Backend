@@ -1,4 +1,3 @@
-// File: backend/models/LeftoverListing.js
 const mongoose = require('mongoose');
 
 const leftoverListingSchema = new mongoose.Schema({
@@ -7,7 +6,7 @@ const leftoverListingSchema = new mongoose.Schema({
     sellerBusinessName: { type: String, required: true },
     itemName: { type: String, required: true },
     quantity: { type: Number, required: true },
-    unit: { type: String, required: true }, // e.g., "kg", "litre"
+    unit: { type: String, required: true },
     price: { type: Number, required: true },
     area: { type: String, required: true, index: true },
     status: { type: String, enum: ['Available', 'Sold'], default: 'Available' },

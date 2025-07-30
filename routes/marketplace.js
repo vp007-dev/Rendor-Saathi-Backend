@@ -1,6 +1,5 @@
-// File: backend/routes/marketplace.js
 const express = require('express');
-const User = require('../models/User'); // Adjust path if needed
+const User = require('../models/User');
 const router = express.Router();
 
 const CATEGORIES = [ "Vegetables", "Fruits", "Dairy", "Spices", "Oils", "Breads", "Sauces", "Dal & Rice" ];
@@ -38,7 +37,6 @@ router.get('/suppliers/find-by-area', async (req, res) => {
     }
 });
 
-// --- NEW: Endpoint to get details for a single supplier ---
 router.get('/supplier/:id', async (req, res) => {
     try {
         const supplierId = req.params.id;
@@ -48,8 +46,6 @@ router.get('/supplier/:id', async (req, res) => {
             return res.status(404).json({ message: 'Supplier not found.' });
         }
 
-        // For now, we send back the necessary details.
-        // Later, we can add product lists and reviews here.
         const supplierDetails = {
             id: supplier._id,
             businessName: supplier.businessName,
@@ -59,7 +55,6 @@ router.get('/supplier/:id', async (req, res) => {
             yearEstablished: supplier.yearEstablished,
             providesDelivery: supplier.providesDelivery,
             suppliesCategories: supplier.suppliesCategories,
-            // Placeholder for reviews
             reviews: [
                 { id: 1, author: 'Raju Samosa', rating: 5, text: 'Very fresh vegetables, always on time!' },
                 { id: 2, author: 'Priya Chaat', rating: 4, text: 'Good quality spices, but sometimes delivery is late.' }

@@ -1,9 +1,7 @@
-// File: backend/routes/leftover.js
 const express = require('express');
 const LeftoverListing = require('../models/LeftoverListing');
 const router = express.Router();
 
-// POST /api/leftovers - Create a new listing
 router.post('/leftovers', async (req, res) => {
     try {
         const newListing = new LeftoverListing(req.body);
@@ -15,7 +13,6 @@ router.post('/leftovers', async (req, res) => {
     }
 });
 
-// GET /api/leftovers - Get available listings
 router.get('/leftovers', async (req, res) => {
     const { area, vendorId } = req.query;
     if (!area || !vendorId) {
@@ -24,8 +21,7 @@ router.get('/leftovers', async (req, res) => {
     try {
         const listings = await LeftoverListing.find({
             area: area,
-            status: 'Available',
-            sellerId: { $ne: vendorId } // Use sellerId to match the model
+            status: 'Available'
         }).sort({ createdAt: -1 });
         res.json(listings);
     } catch (error) {
@@ -33,7 +29,6 @@ router.get('/leftovers', async (req, res) => {
     }
 });
 
-// PUT /api/leftovers/:listingId/buy - "Buy" a listing
 router.put('/leftovers/:listingId/buy', async (req, res) => {
     try {
         const listing = await LeftoverListing.findById(req.params.listingId);

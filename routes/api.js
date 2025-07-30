@@ -1,4 +1,3 @@
-// File: backend/routes/api.js
 const express = require('express');
 const axios = require('axios');
 const User = require('../models/User');
@@ -6,8 +5,6 @@ const Product = require('../models/Product');
 const Order = require('../models/Order');
 const Review = require('../models/Review');
 const router = express.Router();
-
-// --- Gemini Menu Extraction Route ---
 router.post('/menu/extract', async (req, res) => {
     const { imageBase64 } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
@@ -16,8 +13,7 @@ router.post('/menu/extract', async (req, res) => {
         return res.status(400).json({ message: 'Image and API Key are required.' });
     }
 
-    // --- FIXED: Updated the model name to gemini-1.5-flash ---
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const payload = {
         contents: [{
@@ -30,7 +26,6 @@ router.post('/menu/extract', async (req, res) => {
 
     try {
         const response = await axios.post(url, payload);
-        // Extract the JSON string from the Gemini response
         let jsonString = response.data.candidates[0].content.parts[0].text;
         jsonString = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
         
@@ -42,7 +37,7 @@ router.post('/menu/extract', async (req, res) => {
     }
 });
 
-// --- Save Menu Route ---
+
 router.post('/menu/save/:vendorId', async (req, res) => {
     try {
         const { menu } = req.body;
@@ -57,7 +52,7 @@ router.post('/menu/save/:vendorId', async (req, res) => {
     }
 });
 
-// --- PRODUCT ROUTES (for Suppliers) ---
+
 router.post('/products', async (req, res) => {
     try {
         const newProduct = new Product(req.body);
@@ -73,7 +68,7 @@ router.get('/products/supplier/:supplierId', async (req, res) => {
     } catch (error) { res.status(500).json({ message: error.message }); }
 });
 
-// --- ORDER ROUTES ---
+
 router.post('/orders', async (req, res) => {
     try {
         const newOrder = new Order(req.body);
@@ -97,7 +92,7 @@ router.put('/orders/:orderId/status', async (req, res) => {
     } catch (error) { res.status(500).json({ message: error.message }); }
 });
 
-// --- REVIEW ROUTES ---
+
 router.post('/reviews', async (req, res) => {
     try {
         const newReview = new Review(req.body);
@@ -113,7 +108,7 @@ router.get('/reviews/supplier/:supplierId', async (req, res) => {
     } catch (error) { res.status(500).json({ message: error.message }); }
 });
 
-// --- PROFILE ROUTE ---
+
 router.put('/profile/:userId', async (req, res) => {
     try {
         const updatedUser = await User.findByIdAndUpdate(req.params.userId, req.body, { new: true });
